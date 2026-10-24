@@ -1,11 +1,5 @@
 # TermsLens 🛡️
 > **The Dark-Pattern & Predatory Terms Scanner for Everyday Web Users**  
-> *Built for the VComply Campus Recruitment Build & Deploy Assignment*
-
-[![Live Demo](https://img.shields.io/badge/Demo-Live_on_Render-brightgreen?style=for-the-badge&logo=render)](https://termslens.onrender.com)
-[![Java](https://img.shields.io/badge/Backend-Java_17_%7C_Spring_Boot_3-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://spring.io)
-[![React](https://img.shields.io/badge/Frontend-React_18_%7C_Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![Engine](https://img.shields.io/badge/Engine-Deterministic_Heuristics_%3C50ms-10B981?style=for-the-badge)](https://github.com)
 
 ---
 
@@ -211,5 +205,3 @@ mvn package -DskipTests
 ## 👤 Author
 **Krishna Vardhan Baratam**  
 Final-year B.Tech Computer Science & Engineering, VIT-AP University  
-Top 240 University Coder (out of 12,000+ students across VIT)  
-*Built for the VComply Campus Recruitment Build & Deploy Assignment (Deadline: Oct 26, 11 AM IST)*
