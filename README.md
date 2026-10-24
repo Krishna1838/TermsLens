@@ -1,5 +1,11 @@
 # TermsLens 🛡️
 > **The Dark-Pattern & Predatory Terms Scanner for Everyday Web Users**  
+> *Built for the VComply Campus Recruitment Build & Deploy Assignment*
+
+[![Live Demo](https://img.shields.io/badge/Demo-Live_on_Render-brightgreen?style=for-the-badge&logo=render)](https://termslens.onrender.com)
+[![Java](https://img.shields.io/badge/Backend-Java_17_%7C_Spring_Boot_3-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://spring.io)
+[![React](https://img.shields.io/badge/Frontend-React_18_%7C_Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Engine](https://img.shields.io/badge/Engine-Deterministic_Heuristics_%3C50ms-10B981?style=for-the-badge)](https://github.com)
 
 ---
 
@@ -29,7 +35,7 @@ TermsLens is designed for:
 
 ---
 
-## 🏗️ 4. Architecture & Engineering Design
+## 🏗️ 3. Architecture & Engineering Design
 
 ```mermaid
 flowchart TD
@@ -65,7 +71,7 @@ flowchart TD
 
 ---
 
-## 🪤 5. Regulatory Dark Pattern Taxonomy (FTC / EU Standard)
+## 🪤 4. Regulatory Dark Pattern Taxonomy (FTC / EU Standard)
 
 TermsLens categorizes detected clauses using official consumer-protection taxonomy:
 
@@ -84,7 +90,7 @@ TermsLens categorizes detected clauses using official consumer-protection taxono
 
 ---
 
-## 🚀 6. Key Features & Capabilities
+## 🚀 5. Key Features & Capabilities
 
 * **1-Click Preset Samples:** Immediate testability for evaluators without searching for 40-page contracts:
   * `[🎬 Streaming Free Trial]` — Grade F / High billing & arbitration traps
@@ -99,7 +105,7 @@ TermsLens categorizes detected clauses using official consumer-protection taxono
 
 ---
 
-## 💻 7. Tech Stack
+## 💻 6. Tech Stack
 
 * **Backend:** Java 17, Spring Boot 3.2.5, Maven, Jsoup 1.17.2, Lombok.
 * **Frontend:** React 18, Vite, Lucide React, Custom CSS Design System (Editorial Light & Dark modes).
@@ -108,7 +114,7 @@ TermsLens categorizes detected clauses using official consumer-protection taxono
 
 ---
 
-## 🛠️ 8. Setup Instructions
+## 🛠️ 7. Setup Instructions
 
 ### Quick Local Run (Packaged JAR)
 ```bash
@@ -138,7 +144,7 @@ mvn package -DskipTests
 
 ---
 
-## ⚠️ 9. Known Limitations
+## ⚠️ 8. Known Limitations
 
 1. **JavaScript-Rendered Single-Page App URLs:** The Jsoup web scraper extracts content directly from raw HTML. Pages rendered purely via client-side JavaScript without SSR (or behind Cloudflare bot challenges) may return sparse text. In such cases, the **Direct Paste** tab provides instant fallback.
 2. **Language Support:** The initial heuristic rules and regex dictionaries are currently optimized for English-language agreements. Non-English policies will be scanned for universal numerical/currency patterns, but semantic clause translations require English input.
@@ -146,7 +152,7 @@ mvn package -DskipTests
 
 ---
 
-## 📡 10. REST API Documentation
+## 📡 9. REST API Documentation
 
 ### 1. Analyze Policy
 * **Endpoint:** `POST /api/v1/analyze`
@@ -205,3 +211,5 @@ mvn package -DskipTests
 ## 👤 Author
 **Krishna Vardhan Baratam**  
 Final-year B.Tech Computer Science & Engineering, VIT-AP University  
+Top 240 University Coder (out of 12,000+ students across VIT)  
+*Built for the VComply Campus Recruitment Build & Deploy Assignment (Deadline: Oct 26, 11 AM IST)*
