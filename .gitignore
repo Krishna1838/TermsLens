@@ -1,0 +1,26 @@
+# Build outputs
+target/
+**/target/
+dist/
+**/dist/
+*.class
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs & temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+test_req.json
+test_url.json
+test_url2.json
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
