@@ -1,9 +1,9 @@
-// TermsLens API Client with Client-Side Fallback Engine
+// TermsLens API Client with Fast Client-Side Engine and Multi-Proxy Web Fetcher
 
 import { analyzeTextClientSide } from './analyzer';
 
 export async function analyzePolicy({ text, url, presetId }) {
-  // If presetId is given, resolve text from presets
+  // 1. Preset handling
   if (presetId) {
     const preset = localPresets.find(p => p.id === presetId);
     if (preset) {
@@ -11,29 +11,60 @@ export async function analyzePolicy({ text, url, presetId }) {
     }
   }
 
-  // If text is provided, analyze directly client-side in sub-5ms!
+  // 2. Direct text paste handling (Instant sub-5ms)
   if (text && text.trim()) {
     return analyzeTextClientSide(text);
   }
 
-  // If URL is provided, fetch via CORS-friendly text extractor or fallback
+  // 3. Web URL fetching with robust CORS proxies
   if (url && url.trim()) {
+    const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+
+    // Priority 1: Jina Reader (High-speed, CORS-enabled clean web scraper)
     try {
-      const targetUrl = url.startsWith('http') ? url : `https://${url}`;
-      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
-      const data = await response.json();
-      if (data.contents) {
-        // Strip HTML tags cleanly
-        const clean = data.contents.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ');
-        return analyzeTextClientSide(clean);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const res = await fetch(`https://r.jina.ai/${targetUrl}`, {
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      if (res.ok) {
+        const rawText = await res.text();
+        if (rawText && rawText.length > 50) {
+          const bounded = rawText.length > 25000 ? rawText.substring(0, 25000) : rawText;
+          return analyzeTextClientSide(bounded);
+        }
       }
-    } catch (e) {
-      console.warn("URL fetch failed, falling back to local analysis:", e);
+    } catch (err) {
+      console.warn("Jina Reader fetch failed, trying proxy 2:", err);
     }
-    throw new Error("Unable to fetch URL directly due to website CORS restrictions. Please copy & paste the clauses into Direct Paste.");
+
+    // Priority 2: AllOrigins proxy
+    try {
+      const controller2 = new AbortController();
+      const timeoutId2 = setTimeout(() => controller2.abort(), 8000);
+      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`, {
+        signal: controller2.signal
+      });
+      clearTimeout(timeoutId2);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.contents) {
+          const clean = data.contents.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ');
+          if (clean.length > 50) {
+            const bounded = clean.length > 25000 ? clean.substring(0, 25000) : clean;
+            return analyzeTextClientSide(bounded);
+          }
+        }
+      }
+    } catch (err2) {
+      console.warn("Allorigins fetch failed:", err2);
+    }
+
+    throw new Error("Unable to fetch this URL directly (it may block external readers or require a login). Please copy and paste its text into 'Direct Paste'!");
   }
 
-  throw new Error("Please enter text or select a 1-click sample to scan.");
+  throw new Error("Please enter terms text or paste a valid URL to scan.");
 }
 
 export async function fetchPresets() {

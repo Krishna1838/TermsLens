@@ -97,10 +97,38 @@ public class ClauseDetectionEngine {
                 "WALLET",
                 "MODERATE",
                 "🔒 Sunk Cost Trap",
-                "(payments?|fees?|charges?|all sales).{0,50}(strictly non-refundable|not eligible for (?:any )?refund|no refunds (?:or credits )?shall be provided)",
+                "(?:payments?|fees?|charges?|all sales).{0,60}(?:strictly non-refundable|not eligible for (?:any )?refund|no refunds (?:or credits )?shall be provided|all sales are final)",
                 "Even if the service goes down or you cancel 5 minutes after a renewal charge, they will never return your money.",
                 "Pay only on a monthly tier rather than prepaying annual contracts until trust is proven.",
                 12,
+                null
+        ));
+
+        // Irrevocable Bank ACH / Preauthorized Debit
+        rules.add(new RuleDefinition(
+                "W5_AUTO_DEBIT_ACH",
+                "Irrevocable Preauthorized Bank ACH Debits",
+                "WALLET",
+                "CRITICAL",
+                "💳 Auto-Grasp Debit",
+                "(?:authoriz(?:e|es|ing)|consent to).{0,60}(?:automatic|recurring|continuous|initiate).{0,60}(?:ach withdrawals?|electronic debit|debit charges?|bank withdrawals?).{0,60}(?:bank account|payday)",
+                "You give the company permission to automatically pull money straight from your personal bank account or payday deposit without needing authorization for each debit.",
+                "Never provide direct bank ACH or routing numbers to predatory lenders; use credit cards with fraud protection.",
+                25,
+                null
+        ));
+
+        // Compounding Daily Fines & Penalty Fees
+        rules.add(new RuleDefinition(
+                "W6_COMPOUNDING_FEES",
+                "Compounding Daily Fines & Penalty Fees",
+                "WALLET",
+                "CRITICAL",
+                "📈 Escalating Penalty",
+                "(?:fee|penalty|charge).{0,80}(?:compounding daily|per failed attempt|re-presentation fee|daily interest|insufficient funds fee|accumulat(?:e|ing) daily)",
+                "If a payment bounces, they hit you with compounding daily fines and continuous penalty fees that rapidly snowball into massive debt.",
+                "Close the linked account or notify your bank to place a stop-payment order immediately.",
+                20,
                 null
         ));
 
@@ -171,7 +199,7 @@ public class ClauseDetectionEngine {
                 "RIGHTS",
                 "CRITICAL",
                 "⚖️ Legal Disarmament",
-                "(resolve (?:all )?disputes?.{0,60}(?:binding|individual) arbitration|mandatory (?:binding )?arbitration|waive.{0,40}(?:right to )?(?:a )?(?:jury|court) trial)",
+                "(?:binding|individual|mandatory) arbitration|(?:disputes?.{0,80}resolved.{0,80}arbitration|resolved.{0,80}disputes?.{0,80}arbitration)|arbitration (?:provision|agreement|clause)",
                 "You surrender your constitutional right to take this company to a real court or judge if they scam you or lose your money.",
                 "Exercise your statutory 30-day arbitration opt-out right by sending an email notice.",
                 25,
@@ -185,21 +213,49 @@ public class ClauseDetectionEngine {
                 "RIGHTS",
                 "CRITICAL",
                 "🛡️ Immunity Shield",
-                "(waive.{0,60}(?:class|collective|representative) (?:action|lawsuit|proceeding)|class action waiver|no right to participate in a class action)",
+                "waiv(?:e|ing|ed|er)?.{0,80}(?:class|collective|representative)[- ](?:action|lawsuit|proceeding)|class[- ]action waiver|no right to participate in a (?:class|collective)[- ]action",
                 "If this company damages thousands of users simultaneously, you cannot join together in a group lawsuit—each user must fight alone.",
                 "Opt out of the dispute agreement within 30 days of registration.",
                 22,
                 "Class Action Waiver Clause"
         ));
 
+        // Court & Jury Trial Waiver
+        rules.add(new RuleDefinition(
+                "R3_JURY_TRIAL_WAIVER",
+                "Court & Jury Trial Waiver",
+                "RIGHTS",
+                "CRITICAL",
+                "🚫 Trial Waiver",
+                "waiv(?:e|ing|ed|er)?.{0,80}(?:right to )?(?:participate in a )?(?:jury|court) trial|surrender.{0,60}(?:right to )?(?:a )?(?:jury|court) trial",
+                "You permanently surrender your constitutional right to a public trial before an impartial jury of your peers.",
+                "Send the arbitration and dispute opt-out notice to preserve civil court access.",
+                20,
+                "Dispute Resolution & Binding Arbitration"
+        ));
+
+        // Remote or Biased Forum Selection
+        rules.add(new RuleDefinition(
+                "R4_BIASED_VENUE",
+                "Remote or Biased Jurisdiction of Choice",
+                "RIGHTS",
+                "HIGH",
+                "📍 Biased Venue",
+                "(?:jurisdiction|venue).{0,50}(?:of (?:our|its) choosing|sole discretion|remote)",
+                "The company forces you to travel to a distant, company-friendly state or chosen venue to dispute any claim.",
+                "Insist on consumer claims in your local municipal small claims court.",
+                15,
+                null
+        ));
+
         // Unilateral Contract Modification
         rules.add(new RuleDefinition(
-                "R3_UNILATERAL_CHANGE",
+                "R5_UNILATERAL_CHANGE",
                 "Unilateral Terms Modification",
                 "RIGHTS",
                 "HIGH",
                 "📄 Silent Rewrite",
-                "(modify|amend|update|change) (?:these )?(?:terms|agreement).{0,60}(at (?:any time|our sole discretion)|without (?:prior )?notice|upon posting).{0,60}(continued use constitutes acceptance)",
+                "(?:modify|amend|update|change) (?:these )?(?:terms|agreement).{0,80}(?:at (?:any time|our sole discretion)|without (?:prior )?notice|upon posting).{0,80}(?:continued use constitutes acceptance|acceptance)",
                 "They can quietly rewrite their rules or take away your benefits without notifying you; simply visiting the site counts as agreeing.",
                 "Monitor terms revisions using web archive trackers or review clause change logs.",
                 15,
@@ -208,12 +264,12 @@ public class ClauseDetectionEngine {
 
         // Total Liability Disclaimer ($50 Cap)
         rules.add(new RuleDefinition(
-                "R4_TOTAL_DISCLAIMER",
+                "R6_TOTAL_DISCLAIMER",
                 "Total Liability Disavowal",
                 "RIGHTS",
                 "HIGH",
                 "🛑 Liability Evasion",
-                "(maximum|total|aggregate) liability.{0,60}(shall not exceed.{0,40}(?:[$]50|[$]100|amount paid|one hundred dollars)|in no event shall (?:we|company) be liable for any damages)",
+                "(?:maximum|total|aggregate) liability.{0,80}(?:shall not exceed.{0,40}(?:[$]\\s*\\d+|amount paid|one hundred dollars)|in no event shall (?:we|company) be liable for any damages)",
                 "If the company's negligence or data breach costs you thousands of dollars, their liability is contractually capped at $50.",
                 "Never store critical unbacked assets or primary financial data with this vendor.",
                 15,

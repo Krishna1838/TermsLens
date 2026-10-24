@@ -17,6 +17,7 @@ export default function App() {
   const [inputText, setInputText] = useState(localPresets[0].content);
   const [inputUrl, setInputUrl] = useState('');
   const [isScanning, setIsScanning] = useState(false);
+  const [scanError, setScanError] = useState(null);
   const [auditResult, setAuditResult] = useState(null);
   const [isOptOutOpen, setIsOptOutOpen] = useState(false);
 
@@ -48,11 +49,13 @@ export default function App() {
   const handleSelectPreset = (preset) => {
     setSelectedPresetId(preset.id);
     setInputText(preset.content);
+    setScanError(null);
     triggerScan(preset.content, '', preset.id);
   };
 
   const triggerScan = async (textToScan, urlToScan, presetId) => {
     setIsScanning(true);
+    setScanError(null);
     try {
       const result = await analyzePolicy({
         text: textToScan,
@@ -62,6 +65,7 @@ export default function App() {
       setAuditResult(result);
     } catch (err) {
       console.error('Scan error:', err);
+      setScanError(err.message || 'Failed to scan terms. Please verify the URL or try Direct Paste.');
     } finally {
       setIsScanning(false);
     }
@@ -99,6 +103,26 @@ export default function App() {
           onScan={handleManualScan}
           isScanning={isScanning}
         />
+
+        {/* Scan Error Notice */}
+        {scanError && (
+          <div style={{
+            marginTop: '-1.5rem',
+            marginBottom: '2rem',
+            padding: '1rem 1.25rem',
+            borderRadius: '0.75rem',
+            backgroundColor: 'var(--danger-bg)',
+            border: '1px solid var(--danger-border)',
+            color: 'var(--danger-text)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            fontSize: '0.875rem',
+            fontWeight: 600
+          }}>
+            <span>⚠️ {scanError}</span>
+          </div>
+        )}
 
         {/* Audit Results View */}
         {auditResult && (

@@ -92,7 +92,7 @@ export default function ScannerBox({
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://example.com/terms"
+            placeholder="https://policies.google.com/terms"
             className="font-mono"
             style={{
               width: '100%',
@@ -105,8 +105,56 @@ export default function ScannerBox({
               outline: 'none'
             }}
           />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.625rem', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Quick sample URLs:</span>
+            <button
+              type="button"
+              onClick={() => setUrl('https://policies.google.com/terms')}
+              style={{
+                fontSize: '0.7rem',
+                padding: '0.2rem 0.5rem',
+                borderRadius: '0.375rem',
+                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-card)',
+                color: 'var(--text-main)',
+                cursor: 'pointer'
+              }}
+            >
+              Google Terms
+            </button>
+            <button
+              type="button"
+              onClick={() => setUrl('https://www.netflix.com/terms')}
+              style={{
+                fontSize: '0.7rem',
+                padding: '0.2rem 0.5rem',
+                borderRadius: '0.375rem',
+                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-card)',
+                color: 'var(--text-main)',
+                cursor: 'pointer'
+              }}
+            >
+              Netflix Terms
+            </button>
+            <button
+              type="button"
+              onClick={() => setUrl('https://discord.com/terms')}
+              style={{
+                fontSize: '0.7rem',
+                padding: '0.2rem 0.5rem',
+                borderRadius: '0.375rem',
+                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-card)',
+                color: 'var(--text-main)',
+                cursor: 'pointer'
+              }}
+            >
+              Discord Terms
+            </button>
+          </div>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)', display: 'block', marginTop: '0.5rem' }}>
-            TermsLens will fetch and extract the legal text automatically via Jsoup parser.
+            TermsLens fetches and analyzes live terms via high-speed CORS scraper. Supports public Terms of Service and Privacy Policies.
           </span>
         </div>
       )}
