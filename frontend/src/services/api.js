@@ -31,7 +31,8 @@ export async function analyzePolicy({ text, url, presetId }) {
       if (res.ok) {
         const rawText = await res.text();
         if (rawText && rawText.length > 50) {
-          const bounded = rawText.length > 25000 ? rawText.substring(0, 25000) : rawText;
+          // Allow up to 150,000 characters to cover full 50+ page terms without truncation
+          const bounded = rawText.length > 150000 ? rawText.substring(0, 150000) : rawText;
           return analyzeTextClientSide(bounded);
         }
       }
@@ -52,7 +53,7 @@ export async function analyzePolicy({ text, url, presetId }) {
         if (data.contents) {
           const clean = data.contents.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ');
           if (clean.length > 50) {
-            const bounded = clean.length > 25000 ? clean.substring(0, 25000) : clean;
+            const bounded = clean.length > 150000 ? clean.substring(0, 150000) : clean;
             return analyzeTextClientSide(bounded);
           }
         }
