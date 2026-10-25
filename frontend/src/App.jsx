@@ -13,23 +13,21 @@ import { analyzePolicy, fetchPresets, localPresets } from './services/api';
 export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [presets, setPresets] = useState(localPresets);
-  const [selectedPresetId, setSelectedPresetId] = useState('streaming');
-  const [inputText, setInputText] = useState(localPresets[0].content);
+  const [selectedPresetId, setSelectedPresetId] = useState(null);
+  const [inputText, setInputText] = useState('');
   const [inputUrl, setInputUrl] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [scanError, setScanError] = useState(null);
   const [auditResult, setAuditResult] = useState(null);
   const [isOptOutOpen, setIsOptOutOpen] = useState(false);
 
-  // Load presets & run default scan on mount
+  // Load presets without auto-scanning
   useEffect(() => {
     async function loadInitial() {
       const serverPresets = await fetchPresets();
       if (serverPresets && serverPresets.length > 0) {
         setPresets(serverPresets);
       }
-      // Run initial audit on default streaming sample
-      triggerScan(localPresets[0].content, '');
     }
     loadInitial();
   }, []);
