@@ -92,7 +92,7 @@ export default function ScannerBox({
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://policies.google.com/terms"
+            placeholder="https://www.dream11.com/features/tnc/termsAndConditionStandard"
             className="font-mono"
             style={{
               width: '100%',
@@ -109,7 +109,7 @@ export default function ScannerBox({
             <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Quick sample URLs:</span>
             <button
               type="button"
-              onClick={() => setUrl('https://policies.google.com/terms')}
+              onClick={() => setUrl('https://www.dream11.com/features/tnc/termsAndConditionStandard')}
               style={{
                 fontSize: '0.7rem',
                 padding: '0.2rem 0.5rem',
@@ -120,11 +120,11 @@ export default function ScannerBox({
                 cursor: 'pointer'
               }}
             >
-              Google Terms
+              Dream11 Terms
             </button>
             <button
               type="button"
-              onClick={() => setUrl('https://www.netflix.com/terms')}
+              onClick={() => setUrl('https://www.zomato.com/conditions')}
               style={{
                 fontSize: '0.7rem',
                 padding: '0.2rem 0.5rem',
@@ -135,22 +135,7 @@ export default function ScannerBox({
                 cursor: 'pointer'
               }}
             >
-              Netflix Terms
-            </button>
-            <button
-              type="button"
-              onClick={() => setUrl('https://discord.com/terms')}
-              style={{
-                fontSize: '0.7rem',
-                padding: '0.2rem 0.5rem',
-                borderRadius: '0.375rem',
-                border: '1px solid var(--border-color)',
-                backgroundColor: 'var(--bg-card)',
-                color: 'var(--text-main)',
-                cursor: 'pointer'
-              }}
-            >
-              Discord Terms
+              Zomato Terms
             </button>
           </div>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)', display: 'block', marginTop: '0.5rem' }}>
