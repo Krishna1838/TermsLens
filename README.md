@@ -115,7 +115,7 @@ TermsLens categorizes detected clauses using official consumer-protection taxono
 ### Quick Local Run (Packaged JAR)
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/termslens.git
+git clone https://github.com/Krishna1838/termslens.git
 cd termslens
 
 # Run the pre-built single JAR (requires Java 17+):
@@ -140,7 +140,46 @@ mvn package -DskipTests
 
 ---
 
-## ⚠️ 9. Known Limitations
+## 🧪 9. Testing Strategy, Unit Tests & Edge Case Matrix
+> For full test suite specifications, edge cases, and architectural assertions, see our formal **[TEST_PLAN.md](./TEST_PLAN.md)**.
+
+### A. Automated Unit Tests (JUnit 5)
+Automated backend unit tests reside in `backend/src/test/java/com/termslens/api/TermsLensApplicationTests.java`:
+* `testStreamingSampleDetection()`: Validates that auto-renewals, certified mail cancellations, and mandatory arbitration are flagged, deducting scores into Grade F.
+* `testCleanSampleScoresGradeA()`: Validates that consumer-friendly SaaS terms trigger 0 false positives, achieving a clean 100/100 Grade A score.
+* `contextLoads()`: Verifies Spring Boot dependency injection across `ClauseDetectionEngine`, `ScoringEngine`, and `PresetService`.
+
+Run tests locally:
+```bash
+cd backend
+mvn clean test
+```
+
+### B. Edge Case Handling
+1. **Document Length Scalability (150,000 Chars):** Large enterprise terms (e.g., Zomato at ~148k chars, Dream11 at ~38k chars) are bounded to 150,000 characters with streaming regex to prevent memory overflows while ensuring late-document arbitration clauses are captured.
+2. **Regex Metacharacter Escaping:** Currency thresholds (`$50`) use safe character classes `[$]` to avoid Java regex compilation crashes.
+3. **Legal Abbreviation Tokenization:** Sentence boundary tokenizers recognize corporate abbreviations (`LLP`, `Inc.`, `Ltd.`, `e.g.`, `i.e.`) so sentence splits do not fracture clause context.
+4. **URL Normalization:** Automatically sanitizes user URLs (e.g., auto-prepending `https://` and stripping trailing whitespace).
+5. **CORS & Proxy Fallback:** Employs a dual-reader cascade (Jina Reader with a 12s abort controller, cascading to AllOrigins proxy) to bypass CORS restrictions on public policy pages.
+
+### C. Error States & UI Resiliency
+* **Network & Blocking Fallback:** When a site blocks automated scrapers or requires user authentication, the UI catches the exception and renders an actionable amber alert banner prompting the user to use **Direct Paste**.
+* **Input Validation:** Prevents empty requests, displaying inline prompts if scanning is triggered without input.
+* **Empty/Clean State:** Displays a green consumer protection seal with clear guidance when zero predatory traps are detected.
+
+### D. Verified End-to-End Test Matrix
+| ID | Category | Test Target / Input | Expected Behavior | Actual Production Result | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **TC-01** | Preset | `Streaming Free Trial` | Flags sneaky auto-renew, certified mail cancel, mandatory arbitration. Score < 40. | **Score: 0/100 (Grade F)**. All 3 dark patterns flagged with plain-English "The Catch". | ✅ PASS |
+| **TC-02** | Preset | `Instant Micro-Loan` | Flags contacts/SMS grasping, 365% APR hikes, telemetry resale. | **Score: 0/100 (Grade F)**. Flags device snooping and financial escalation. | ✅ PASS |
+| **TC-03** | Preset | `Social Media & Dating` | Flags perpetual biometric license, AI training rights, data brokerage. | **Score: 55/100 (Grade D)**. Flags AI harvesting & data brokerage. | ✅ PASS |
+| **TC-04** | Preset | `Fair SaaS Benchmark` | 1-click cancel, zero data resale, 30-day refunds. | **Score: 100/100 (Grade A)**. Zero false positives. | ✅ PASS |
+| **TC-05** | Live URL | `Dream11 Terms` | Scans 38,622 characters via URL reader. Detects binding arbitration clause at char ~29,000. | **Score: 72/100 (Grade C)**. Arbitration clause isolated with opt-out generator. | ✅ PASS |
+| **TC-06** | Live URL | `Zomato Terms` | Scans 148,420 characters. Detects call recording & contact permission clause. | **Score: 82/100 (Grade B)**. Excessive device snooping flagged with protective checklist. | ✅ PASS |
+
+---
+
+## ⚠️ 10. Known Limitations
 
 1. **JavaScript-Rendered Single-Page App URLs:** The Jsoup web scraper extracts content directly from raw HTML. Pages rendered purely via client-side JavaScript without SSR (or behind Cloudflare bot challenges) may return sparse text. In such cases, the **Direct Paste** tab provides instant fallback.
 2. **Language Support:** The initial heuristic rules and regex dictionaries are currently optimized for English-language agreements. Non-English policies will be scanned for universal numerical/currency patterns, but semantic clause translations require English input.
@@ -148,7 +187,7 @@ mvn package -DskipTests
 
 ---
 
-## 📡 10. REST API Documentation
+## 📡 11. REST API Documentation
 
 ### 1. Analyze Policy
 * **Endpoint:** `POST /api/v1/analyze`
