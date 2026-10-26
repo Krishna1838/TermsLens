@@ -1,11 +1,5 @@
 # TermsLens — Test Plan & Quality Assurance Specification
 
-> **Document Status:** Active & Verified  
-> **Author:** Krishna Vardhan Baratam  
-> **Target:** VComply Campus Recruitment Build & Deploy Assignment  
-> **Repository:** [github.com/Krishna1838/termslens](https://github.com/Krishna1838/termslens)  
-> **Live Deployment:** [termslens.onrender.com](https://termslens.onrender.com)
-
 ---
 
 ## 1. Overview & Testing Philosophy
