@@ -1,5 +1,4 @@
 # TermsLens — Product Write-Up
-**Candidate:** Krishna Vardhan Baratam | VComply Assignment
 
 ### 1. What problem does your tool solve, and who is the user?
 Most people click "I Agree" without reading 30+ pages of legal fine print. Companies use this to hide unfair traps: automatic subscription renewals without reminder emails, selling phone numbers and contacts to advertisers, and mandatory arbitration that stops users from suing in court. 
